@@ -8,8 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 //@CrossOrigin
 @CrossOrigin(origins = {"http://10.30.201.71:5500","http://10.30.201.75:5500",
-        "http://10.30.201.74:5500","http://10.30.201.31:5500","http://127.0.0.1:5500"})
-@RestController("/" )
+        "http://10.30.201.74:5500","http://10.30.201.31:5500","http://127.0.0.1:5500"}
+        )
+@RestController("/")
 public class TestController {
 
     @RequestMapping(value="/userinfo")

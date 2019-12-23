@@ -1,10 +1,14 @@
 package cn.wzvtc.soft;
 
-import org.apache.coyote.Response;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 //@CrossOrigin
 @CrossOrigin(origins = {"http://10.30.201.71:5500","http://10.30.201.75:5500",
@@ -12,6 +16,20 @@ import java.util.Map;
         )
 @RestController("/")
 public class TestController {
+    @Autowired
+    private LvliRepository lvliRepository;
+
+    @RequestMapping(value = "/addlvli")
+    public void addlvli(String lvli){
+        Lvli lvli1=new Lvli("114514",lvli);
+        this.lvliRepository.save(lvli1);
+    }
+
+    @RequestMapping(value = "/finall")
+    public List<Lvli> getlvlilist(){
+        return this.lvliRepository.findAll();
+    }
+
 
     @RequestMapping(value="/userinfo")
     public Map<String,String> userinfo(HttpSession httpSession){

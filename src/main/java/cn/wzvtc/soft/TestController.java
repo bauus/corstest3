@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
@@ -31,28 +32,32 @@ public class TestController {
     }
 
 
-    @RequestMapping(value="/userinfo")
-    public Map<String,String> userinfo(HttpSession httpSession){
-        Map<String,String> resultMap=new HashMap<>();
-        if(httpSession.getAttribute("loginname")!=null){
-                resultMap.put("myname","苏威");
-                resultMap.put("mynumber","18002090225");
+    @RequestMapping(value = "/userinfo")
+    public Map<String, String> userinfo(HttpServletRequest httpServletRequest) {
+        Map<String, String> resultMap = new HashMap<>();
+        if (httpServletRequest.getSession().getAttribute("loginnumber") != null) {
+            resultMap.put("myname", (String) httpServletRequest.getSession(true).getAttribute("loginnumber"));
+            resultMap.put("mynumber", (String) httpServletRequest.getSession(true).getAttribute("username"));
         }
         return resultMap;
-
     }
 
 
-    @RequestMapping(value="/login")
-    public Map<String,String> login(@RequestBody Map<String,String> map, HttpSession httpSession){
-        String pwd=map.get("pwd");
-        String name=map.get("name");
-
-        Map<String,String> resultMap=new HashMap<>();
-        if("18002090225".equals(name) && "18002090225".equals(pwd)) {
-            httpSession.setAttribute("loginname",name);
-            resultMap.put("result","success");
+    @RequestMapping(value = "/login")
+    public Map<String, String> login(@RequestBody Map<String, String> map, HttpServletRequest httpServletRequest) {
+        String pwd = map.get("pwd");
+        String name = map.get("name");
+        Map<String, String> resultMap = new HashMap<>();
+        if (name!=null && name.equals(pwd)) {
+            httpServletRequest.getSession().setAttribute("loginnumber", name);
+            httpServletRequest.getSession().setAttribute("username", name);
+            resultMap.put("result", "success");
         }
         return resultMap;
+    }
+
+    @RequestMapping(value = "/logout")
+    public void logout(HttpSession httpSession) {
+        httpSession.removeAttribute("loginnumber");
     }
 }
